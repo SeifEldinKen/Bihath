@@ -8,7 +8,7 @@ public class UserProfile {
     private boolean isAdmin;
     private List<String> favoriteListQuotesId, createdListQuotesId;
 
-    
+
 
     // --> Constructor
     public UserProfile() {
