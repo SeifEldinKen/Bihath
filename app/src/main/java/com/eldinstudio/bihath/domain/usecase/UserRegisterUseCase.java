@@ -6,7 +6,7 @@ import io.reactivex.rxjava3.core.Single;
 
 public class UserRegisterUseCase {
 
-    private UserRegisterRepositoryImpl registerRepositoryImpl;
+    private final UserRegisterRepositoryImpl registerRepositoryImpl;
 
 
     public UserRegisterUseCase(UserRegisterRepositoryImpl registerRepositoryImpl) {
