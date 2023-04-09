@@ -46,4 +46,7 @@ dependencies {
     // --> FirebaseAuth
     implementation 'com.google.firebase:firebase-analytics:21.2.1'
 
+    // --> Firestore
+    implementation 'com.google.firebase:firebase-firestore:24.4.5'
+
 }
