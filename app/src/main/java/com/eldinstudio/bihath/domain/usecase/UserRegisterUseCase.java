@@ -1,5 +1,7 @@
 package com.eldinstudio.bihath.domain.usecase;
 
+import android.util.Log;
+
 import com.eldinstudio.bihath.data.model.UserProfile;
 import com.eldinstudio.bihath.data.repository.UserRegisterRepositoryImpl;
 import io.reactivex.rxjava3.core.Single;
