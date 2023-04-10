@@ -8,10 +8,12 @@ import android.util.Log;
 
 import com.eldinstudio.bihath.R;
 import com.eldinstudio.bihath.data.model.UserProfile;
+import com.eldinstudio.bihath.data.repository.UserProfileRepositoryImpl;
 import com.eldinstudio.bihath.data.repository.UserRegisterRepositoryImpl;
 import com.eldinstudio.bihath.databinding.ActivityMainBinding;
 import com.eldinstudio.bihath.domain.usecase.UserRegisterUseCase;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.FirebaseFirestore;
 
 import io.reactivex.rxjava3.schedulers.Schedulers;
 
@@ -26,6 +28,8 @@ public class MainActivity extends AppCompatActivity {
 
     private UserRegisterRepositoryImpl registerRepositoryImpl;
 
+    private UserProfileRepositoryImpl userProfileRepositoryImpl;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,6 +41,10 @@ public class MainActivity extends AppCompatActivity {
         FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
         registerRepositoryImpl = new UserRegisterRepositoryImpl(firebaseAuth);
         registerUseCase = new UserRegisterUseCase(registerRepositoryImpl);
+
+        FirebaseFirestore firestore = FirebaseFirestore.getInstance();
+
+        userProfileRepositoryImpl = new UserProfileRepositoryImpl(firestore);
 
         UserProfile userProfile = new UserProfile(
                 "",
@@ -56,6 +64,17 @@ public class MainActivity extends AppCompatActivity {
                 if (error == null) {
 
                     Log.d(TAG, "userId: " + currentUser.getUserId());
+
+                    userProfileRepositoryImpl.createUserProfile(currentUser).subscribeOn(Schedulers.io()).subscribe(
+
+                            () -> {
+                                Log.d(TAG, "completed: ");
+                            },
+                            (throwable) -> {
+                                Log.d(TAG, "error: " + throwable.getMessage());
+                            }
+
+                    );
 
                 } else {
 
