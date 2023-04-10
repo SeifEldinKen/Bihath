@@ -11,6 +11,7 @@ import com.eldinstudio.bihath.data.model.UserProfile;
 import com.eldinstudio.bihath.data.repository.UserProfileRepositoryImpl;
 import com.eldinstudio.bihath.data.repository.UserRegisterRepositoryImpl;
 import com.eldinstudio.bihath.databinding.ActivityMainBinding;
+import com.eldinstudio.bihath.domain.usecase.RegisterAndCreateProfileUseCase;
 import com.eldinstudio.bihath.domain.usecase.UserProfileCreateUseCase;
 import com.eldinstudio.bihath.domain.usecase.UserRegisterUseCase;
 import com.google.firebase.auth.FirebaseAuth;
@@ -31,6 +32,8 @@ public class MainActivity extends AppCompatActivity {
     private UserProfileRepositoryImpl userProfileRepositoryImpl;
     private UserProfileCreateUseCase userProfileCreateUseCase;
 
+    private RegisterAndCreateProfileUseCase registerAndCreateProfileUseCase;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,6 +50,9 @@ public class MainActivity extends AppCompatActivity {
         userProfileRepositoryImpl = new UserProfileRepositoryImpl(firestore);
         userProfileCreateUseCase = new UserProfileCreateUseCase(userProfileRepositoryImpl);
 
+
+        registerAndCreateProfileUseCase = new RegisterAndCreateProfileUseCase(registerUseCase, userProfileCreateUseCase);
+
         UserProfile userProfile = new UserProfile(
                 "",
                 "Seif Eldin",
@@ -58,24 +64,12 @@ public class MainActivity extends AppCompatActivity {
 
 
         binding.buttonRegister.setOnClickListener(v -> {
-
-            registerUseCase.execute(userProfile).subscribeOn(Schedulers.io()).subscribe( (currentUser, error) -> {
-
+            
+            registerAndCreateProfileUseCase.execute(userProfile).subscribeOn(Schedulers.io()).subscribe( (currentUser, error) -> {
 
                 if (error == null) {
 
                     Log.d(TAG, "userId: " + currentUser.getUserId());
-
-                    userProfileCreateUseCase.execute(currentUser).subscribeOn(Schedulers.io()).subscribe(
-
-                            () -> {
-                                Log.d(TAG, "completed: ");
-                            },
-                            (throwable) -> {
-                                Log.d(TAG, "error: " + throwable.getMessage());
-                            }
-
-                    );
 
                 } else {
 
