@@ -64,7 +64,7 @@ public class MainActivity extends AppCompatActivity {
 
 
         binding.buttonRegister.setOnClickListener(v -> {
-            
+
             registerAndCreateProfileUseCase.execute(userProfile).subscribeOn(Schedulers.io()).subscribe( (currentUser, error) -> {
 
                 if (error == null) {
