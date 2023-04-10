@@ -11,6 +11,7 @@ import com.eldinstudio.bihath.data.model.UserProfile;
 import com.eldinstudio.bihath.data.repository.UserProfileRepositoryImpl;
 import com.eldinstudio.bihath.data.repository.UserRegisterRepositoryImpl;
 import com.eldinstudio.bihath.databinding.ActivityMainBinding;
+import com.eldinstudio.bihath.domain.usecase.UserProfileCreateUseCase;
 import com.eldinstudio.bihath.domain.usecase.UserRegisterUseCase;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -27,8 +28,8 @@ public class MainActivity extends AppCompatActivity {
     private UserRegisterUseCase registerUseCase;
 
     private UserRegisterRepositoryImpl registerRepositoryImpl;
-
     private UserProfileRepositoryImpl userProfileRepositoryImpl;
+    private UserProfileCreateUseCase userProfileCreateUseCase;
 
 
     @Override
@@ -43,8 +44,8 @@ public class MainActivity extends AppCompatActivity {
         registerUseCase = new UserRegisterUseCase(registerRepositoryImpl);
 
         FirebaseFirestore firestore = FirebaseFirestore.getInstance();
-
         userProfileRepositoryImpl = new UserProfileRepositoryImpl(firestore);
+        userProfileCreateUseCase = new UserProfileCreateUseCase(userProfileRepositoryImpl);
 
         UserProfile userProfile = new UserProfile(
                 "",
@@ -65,7 +66,7 @@ public class MainActivity extends AppCompatActivity {
 
                     Log.d(TAG, "userId: " + currentUser.getUserId());
 
-                    userProfileRepositoryImpl.createUserProfile(currentUser).subscribeOn(Schedulers.io()).subscribe(
+                    userProfileCreateUseCase.execute(currentUser).subscribeOn(Schedulers.io()).subscribe(
 
                             () -> {
                                 Log.d(TAG, "completed: ");
