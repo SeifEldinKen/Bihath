@@ -6,7 +6,7 @@ import io.reactivex.rxjava3.core.Single;
 
 public interface UserProfileRepository {
 
-    Single<UserProfile> createUserProfile(UserProfile userProfile);
+    Completable createUserProfile(UserProfile userProfile);
 
     Single<UserProfile> getUserProfileById(String userId);
 
