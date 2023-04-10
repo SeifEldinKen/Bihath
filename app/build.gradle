@@ -56,5 +56,5 @@ dependencies {
     implementation 'com.google.firebase:firebase-auth:21.2.0'
 
     // --> Firestore
-
+    implementation 'com.google.firebase:firebase-firestore:24.1.1'
 }
